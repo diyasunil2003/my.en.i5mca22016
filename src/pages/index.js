@@ -24,9 +24,11 @@ export default function Home() {
         setLoading(true);
         try {
             const data = await fetchNotifications(page, LIMIT, typeFilter);
-            setNotifications(data.notifications);
-            // Assuming API provides a total count for pagination, else estimate
-            setTotalCount(100);
+            // Ensure data.notifications exists before setting
+            if (data && data.notifications) {
+                setNotifications(data.notifications);
+                setTotalCount(data.total || 100);
+            }
         } catch (error) {
             logger.error("UI Load Failed", error);
         } finally {
